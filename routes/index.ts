@@ -35,6 +35,9 @@ const routes = {
   checkout: {
     value: "/checkout"
   },
+  myOrder: {
+    value: "/my-order"
+  },
   ...cmsRoutes
 }
 

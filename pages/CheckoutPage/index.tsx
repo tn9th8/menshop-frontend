@@ -28,6 +28,7 @@ const CheckoutPage = () => {
     if (cartData?.length > 0) {
       await confirmCheckout(cartData)
       toast.success('Đặt hàng thành công')
+      route.push(routes.myOrder.value)
     } else {
       toast.error('Chưa có sản phẩm nào trong giỏ hàng')
       route.push(routes.cart.value)

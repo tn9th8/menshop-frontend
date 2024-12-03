@@ -30,7 +30,7 @@ interface ISearchInputProps {
 
 const SearchBarInput = (props: ISearchInputProps) => {
   const { value, placeholder, name, defaultValue, minHeight = '56px' } = props
-  const { tourStore } = useStores()
+  const { productStore, tourStore } = useStores()
   const route = useRouter()
   const { suggestions } = tourStore
   const [isShow, setIsShow] = useState<boolean>(true)
@@ -47,15 +47,9 @@ const SearchBarInput = (props: ISearchInputProps) => {
       setSearchResult(false)
       return
     }
-    tourStore.fetchSearchTour(debounceVal)
+    productStore.setKeyword(debounceVal)
     setSearchResult(true)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceVal])
-
-  function handleGoToAllActivities() {
-    if(debounceVal !== "")
-      route.push(routes.allActivities.value + `?search=${debounceVal}`)
-    }
 
   return (
     <Tippy

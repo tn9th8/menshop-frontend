@@ -10,6 +10,7 @@ class ProductStore {
   productFilter: any = {}
   selectedCategory: string = 'all'
   params: string = ''
+  keyword: string = ''
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore
@@ -51,6 +52,10 @@ class ProductStore {
 
   public setParams(params: string): void {
     this.params = params
+  }
+
+  public setKeyword(keyword: string): void {
+    this.keyword = keyword
   }
 }
 
