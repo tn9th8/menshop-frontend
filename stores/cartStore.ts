@@ -9,7 +9,7 @@ import {
   IUpdateToCart,
 } from 'interfaces/cart'
 import { ISelectedCart } from 'interfaces/checkout'
-import { getReviewCheckout } from 'API/order'
+import { getMyOrders, getReviewCheckout } from 'API/order'
 import { IOrder, IReviewCheckout } from 'interfaces/order'
 
 class CartStrores {
@@ -21,6 +21,7 @@ class CartStrores {
 
   rootStore: RootStore
   listCart = {} as IListCart
+  myOrders: IOrder[] = []
   myCarts: ICart[] = []
   reviewCheckout: IReviewCheckout | null = null
   cartCount: number = 0
@@ -43,6 +44,11 @@ class CartStrores {
   async addToCart(data: IAddToCart): Promise<void> {
     const { cart } = await addToCart(data)
     this.listCart = cart
+  }
+
+  async fetchMyOrders(status: string): Promise<void> {
+    const response = await getMyOrders(status)
+    this.myOrders = response
   }
 
   async fetchMyCarts(): Promise<void> {

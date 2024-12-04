@@ -18,7 +18,7 @@ const HomePage = () => {
   const route = useRouter()
   const { authStore, categoryStore, productStore } = useStores()
   const { categories } = categoryStore
-  const { products, selectedCategory } = productStore
+  const { products, selectedCategory, keyword } = productStore
   const [selectedChildren, setSelectedChildren] = useState<string>('')
   const currentCategory = getValidArray(categories).find(category => category?._id === selectedCategory)
   const categoryChildren = getValidArray(currentCategory?.children)
@@ -29,6 +29,7 @@ const HomePage = () => {
       categories = selectedChildren
     }
     const filter = {
+      keyword,
       categories,
       sort: 'relevant'
     }
@@ -39,7 +40,7 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchData()
-  }, [selectedCategory, selectedChildren])
+  }, [selectedCategory, selectedChildren, keyword])
 
   useEffect(() => {
     setSelectedChildren('')
