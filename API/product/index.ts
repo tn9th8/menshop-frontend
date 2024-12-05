@@ -25,3 +25,12 @@ export async function getProductsForClient(params: string): Promise<IProduct[]> 
   const response = await api.get(`api/v1/client/products/search${params}`)
   return response?.data?.data
 }
+
+export async function createProduct(payload: any): Promise<IProduct> {
+  const response = await api.post('api/v1/seller/products', payload)
+  return response?.data?.data
+}
+
+export async function updateProduct(payload: any): Promise<void> {
+  await api.patch('api/v1/seller/products', payload)
+}

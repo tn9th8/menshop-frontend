@@ -11,7 +11,7 @@ import Title from "components/Title"
 import { formatCurrency, getValidArray } from "utils/common"
 import { FaShoppingCart } from "react-icons/fa"
 import { ICart } from "interfaces/cart"
-import { deleteCart } from "API/cart"
+import { deleteCart, updateQuantity } from "API/cart"
 import { toast } from "react-toastify"
 import { getReviewCheckout } from "API/order"
 import dayjs from "dayjs"
@@ -45,6 +45,12 @@ const CartPage = () => {
     cartStore.fetchReviewCheckout(payload)
 
     localStorage.setItem('cartData', JSON.stringify(payload))
+  }
+
+  async function handleUpdateQuantity(_id: string, quantity: number) {
+    await updateQuantity({ _id, quantity })
+    await cartStore.fetchMyCarts()
+    await fetchReviewCheckout()
   }
 
   async function handleDeleteCartItem(id: string) {
@@ -112,6 +118,7 @@ const CartPage = () => {
                   cartItem={cartItem}
                   selectedCartItems={selectedCartItems}
                   handleSelectCartItem={handleSelectCartItem}
+                  handleUpdateQuantity={handleUpdateQuantity}
                   handleDeleteCartItem={handleDeleteCartItem}
                 />
               </VStack>

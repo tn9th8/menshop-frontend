@@ -34,6 +34,10 @@ export async function getMyCarts(): Promise<ICart[]> {
   }
 }
 
+export async function updateQuantity(data: { _id: string, quantity: number }): Promise<void> {
+  await api.patch('api/v1/client/carts/update-quantity', data)
+}
+
 export async function updateCart(data: IUpdateToCart): Promise<IUpdatedCart> {
   try {
     const response = await api.post(`${CART_URL}/update`, data, {
