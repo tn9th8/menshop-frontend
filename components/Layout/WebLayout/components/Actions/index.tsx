@@ -37,8 +37,8 @@ const Action = (props: IHeaderProps) => {
     route.push(routes.cart.value);
   }
 
-  function gotoBookingViewPage() {
-    route.push(routes.booking.view);
+  function gotoOrderPage() {
+    route.push(routes.myOrder.value);
   }
 
   const { openLoginModal, color, underLineHoverColor, hoverColor } = props;
@@ -51,43 +51,23 @@ const Action = (props: IHeaderProps) => {
     >
       <ActionItem
         color={color}
-        underLineHoverColor={underLineHoverColor}
-        hoverColor={hoverColor}
+        underLineHoverColor="teal.500"
+        hoverColor="teal.500"
         actionIcon={<PiTicketBold />}
-        title="Booking"
-        to={gotoBookingViewPage}
+        title="Đơn hàng"
+        to={gotoOrderPage}
       />
-      <Box
-        {...(cartStore.cartCount !== 0 &&
-          isLogin && {
-            _before: {
-              position: "absolute",
-              content: `"${cartCount}"`,
-              textAlign: "center",
-              fontSize: "13px",
-              top: "0",
-              marginLeft: "30px",
-              marginTop: "13px",
-              width: "20px",
-              height: "20px",
-              background: "#CB3F00",
-              color: "#fff",
-              borderRadius: "full",
-            },
-          })}
-      >
-        <ActionItem
-          color={color}
-          underLineHoverColor={underLineHoverColor}
-          hoverColor={hoverColor}
-          actionIcon={<LuShoppingCart />}
-          title="Cart"
-          to={gotoCartPage}
-        />
-      </Box>
+      <ActionItem
+        color={color}
+        underLineHoverColor="teal.500"
+        hoverColor="teal.500"
+        actionIcon={<LuShoppingCart />}
+        title="Gỉỏ hàng"
+        to={gotoCartPage}
+      />
       <UserProfile
-        underLineHoverColor={underLineHoverColor}
-        hoverColor={hoverColor}
+        underLineHoverColor="teal.500"
+        hoverColor="teal.500"
         color={color}
         openLoginModal={openLoginModal}
       />

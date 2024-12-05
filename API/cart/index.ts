@@ -24,7 +24,7 @@ export async function addToCart(data: IAddToCart): Promise<void> {
 
 export async function getMyCarts(): Promise<ICart[]> {
   try {
-    const response = await api.get('api/v1/client/carts')
+    const response = await api.get('api/v1/client/cart-discount')
     return response?.data?.data
   } catch (error) {
     handleError(error as Error, 'API/cart', 'getMyCarts')

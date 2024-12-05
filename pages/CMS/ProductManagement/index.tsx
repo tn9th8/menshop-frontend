@@ -1,7 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Box, Button, HStack, Img, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
-import { Search2Icon } from '@chakra-ui/icons'
+import { Box, Button, HStack, Img } from '@chakra-ui/react'
 import Icon from 'components/Icon'
 import Table, { IPagination } from 'components/Table'
 import { useStores } from 'hooks/useStores'
@@ -20,15 +19,15 @@ const ProductManagement = () => {
   const [pageIndex, setPageIndex] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
 
-  const pagination: IPagination = { 
+  const pagination: IPagination = {
     pageIndex, 
     tableLength: 10, 
     gotoPage: setPageIndex
   }
 
   const dataInTable = getValidArray(products).map(product => {
-    function gotoShopDetailPage(): void {
-      // router.push(routes.cms.bookingManagement.detail.value(product?.id ?? ''))
+    function gotoProductDetailPage(): void {
+      router.push(routes.cms.productManagement.detail.value(product?._id ?? ''))
     }
 
     return {
@@ -36,7 +35,7 @@ const ProductManagement = () => {
       image: <Img boxSize={10} src={getProductImageUrl(product?.thumb)} borderRadius={8} />,
       actions: (
         <HStack width="86px" cursor="pointer" marginLeft="auto">
-          <Icon iconName="edit.svg" size={32} onClick={gotoShopDetailPage} />
+          <Icon iconName="edit.svg" size={32} onClick={gotoProductDetailPage} />
         </HStack>
       )
     }
@@ -53,16 +52,6 @@ const ProductManagement = () => {
   return (
     <Box paddingX={{ base: 6, lg: 8 }} paddingY={6}>
       <HStack spacing={4} marginBottom={6}>
-        <InputGroup borderRadius="6px" maxWidth="400px" background="white">
-          <InputLeftElement pointerEvents="none">
-            <Search2Icon color="gray.400" />
-          </InputLeftElement>
-          <Input
-            type="search"
-            placeholder="Search product by name"
-            // onChange={changeName}
-          />
-        </InputGroup>
         <HStack spacing={0}>
           <Button
             width="120px"

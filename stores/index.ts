@@ -13,6 +13,7 @@ import CheckoutStore from './checkoutStore'
 import ReviewStore from './reviewStore'
 import ShopStore from './shopStore'
 import ProductStore from './productStores'
+import OrderStore from './orderStores'
 
 export default class RootStore {
   authStore: AuthStore
@@ -21,6 +22,7 @@ export default class RootStore {
   userStore: UserStore
   shopStore: ShopStore
   hotelStore: HotelStore
+  orderStore: OrderStore
   reviewStore: ReviewStore
   bookingStore: BookingStore
   spinnerStore: SpinnerStore
@@ -38,6 +40,7 @@ export default class RootStore {
     this.userStore = new UserStore(this)
     this.shopStore = new ShopStore(this)
     this.hotelStore = new HotelStore(this)
+    this.orderStore = new OrderStore(this)
     this.reviewStore = new ReviewStore(this)
     this.bookingStore = new BookingStore(this)
     this.spinnerStore = new SpinnerStore(this)

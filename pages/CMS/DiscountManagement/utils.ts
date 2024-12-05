@@ -14,7 +14,7 @@ export function getHeaderList() {
     },
     {
       Header: 'APPLIES TO',
-      accessor: 'appliesTo',
+      accessor: 'applyTo',
     },
     {
       Header: 'START DATE',

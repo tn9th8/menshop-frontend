@@ -1,12 +1,12 @@
 import CMSLayout from 'components/Layout/CMSLayout'
-import ProductManagement from 'pages/CMS/ProductManagement'
+import ProductDetail from 'pages/CMS/ProductManagement/ProductDetailPage'
 
-const ProductManagementPage = () => {
+const ProductDetailPage = () => {
   return (
     <CMSLayout title="QUẢN LÝ SẢN PHẨM" topBarTitle="QUẢN LÝ SẢN PHẨM">
-      <ProductManagement />
+      <ProductDetail />
     </CMSLayout>
-  );
+  )
 }
 
-export default ProductManagementPage
+export default ProductDetailPage

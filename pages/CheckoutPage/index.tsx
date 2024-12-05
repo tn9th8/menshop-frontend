@@ -76,7 +76,7 @@ const CheckoutPage = () => {
           </Text>
           {getValidArray(reviewCheckout?.newShopOrders).map((shopOrder) => (
             <VStack key={shopOrder?.shop?._id} width="full" align="flex-start" spacing={3}>
-              <Tag size="lg" color="white" background="teal.500">
+              <Tag size="lg" color="teal.500" background="white" border="2px solid" borderColor="teal.500">
                 {shopOrder?.shop?.name}
               </Tag>
               <VStack width="full">

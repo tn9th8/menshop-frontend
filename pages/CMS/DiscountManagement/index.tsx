@@ -1,126 +1,82 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Box, Button, HStack, Input, InputGroup, InputLeftElement, Tag, TagLabel, Text } from '@chakra-ui/react'
-import { Search2Icon } from '@chakra-ui/icons'
-import { deleteDiscount } from 'API/discount'
-import ConfirmModal from 'components/ConfirmModal'
+import { Box, Button, HStack, Img } from '@chakra-ui/react'
 import Icon from 'components/Icon'
-import Table from 'components/Table'
-import dayjs from 'dayjs'
-import { EDiscountAppliesTo, EDiscountType } from 'enums/discount'
+import Table, { IPagination } from 'components/Table'
 import { useStores } from 'hooks/useStores'
-import { IDiscount } from 'interfaces/discount'
-import capitalize from 'lodash/capitalize'
-import debounce from 'lodash/debounce'
 import { observer } from 'mobx-react'
-import { useRouter } from 'next/navigation'
-import { getValidArray } from 'utils/common'
-import DiscountForm from './DiscountForm'
+import { getProductImageUrl, getValidArray } from 'utils/common'
 import { getHeaderList } from './utils'
-import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
+import routes from 'routes'
+import dayjs from 'dayjs'
+
 
 const DiscountManagement = () => {
-  const { discountStore, tourStore } = useStores()
+  const { discountStore } = useStores()
   const { discounts } = discountStore
-  const router = useRouter()
-  const pageIndex: number = 1
+  const [isValid, setIsValid] = useState<boolean>(true)
+  const [pageIndex, setPageIndex] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
-  const [discountId, setDiscountId] = useState<string>('')
-  const [searchText, setSearchText] = useState<string>('')
-  const [isDeleting, setIsDeleting] = useState<boolean>(false)
-  const [isOpenDiscountForm, setIsOpenDiscountForm] = useState<boolean>(false)
+  
+  const router = useRouter()
 
-  const pagination = { pageIndex, tableLength: 10, gotoPage }
+  const pagination: IPagination = {
+    pageIndex, 
+    tableLength: 10, 
+    gotoPage: setPageIndex
+  }
 
   const dataInTable = getValidArray(discounts).map(discount => {
-    const typeColor = discount?.type === EDiscountType.FIXED_AMOUNT ? 'red' : 'green'
-    const applyColor = discount?.appliesTo === EDiscountAppliesTo.SPECIFIC ? 'blue' : 'orange'
-
-    function onClickEditDiscount(): void {
-      setIsOpenDiscountForm(true)
-      setDiscountId(discount?._id ?? '')
-    }
-
-    function onClickDeleteDiscount(): void {
-      setIsDeleting(true)
-      setDiscountId(discount?._id ?? '')
+    function gotoShopDetailPage(): void {
+      router.push(routes.cms.discountManagement.detail.value(discount?._id ?? ''))
     }
 
     return {
       ...discount,
       startDate: dayjs(discount?.startDate).format('DD/MM/YYYY'),
-      endDate: dayjs( discount?.endDate).format('DD/MM/YYYY'),
-      type: (
-        <Tag variant="outline" colorScheme={typeColor} background={`${typeColor}.50`}>
-          <TagLabel>{capitalize(discount?.type)}</TagLabel>
-        </Tag>
-      ),
-      appliesTo: (
-        <Tag variant="outline" colorScheme={applyColor} background={`${applyColor}.50`}>
-          <TagLabel>{capitalize(discount?.appliesTo)}</TagLabel>
-        </Tag>
-      ),
+      endDate: dayjs(discount?.endDate).format('DD/MM/YYYY'),
       actions: (
         <HStack width="86px" cursor="pointer" marginLeft="auto">
-          <Icon iconName="edit.svg" size={32} onClick={onClickEditDiscount} />
-          <Icon iconName="trash.svg" size={32} onClick={onClickDeleteDiscount} />
+          <Icon iconName="edit.svg" size={32} onClick={gotoShopDetailPage} />
         </HStack>
       )
     }
   })
 
-  function gotoPage(page: number): void {}
-
-  async function handleDeleteDiscount(): Promise<void> {
-    try {
-      if (discountId) {
-        await deleteDiscount(discountId)
-        await discountStore.fetchAllDiscounts()
-        toast.success('Delete discount successfully')
-      }
-    } catch (error) {
-      toast.error('Delete discount failed')
-    }
-  }
-
   useEffect(() => {
-    if (searchText) {
-      discountStore.fetchSearchDiscounts(searchText)
+    if (isValid) {
+      discountStore.fetchValidDiscounts()
     } else {
-      discountStore.fetchAllDiscounts()
+      discountStore.fetchExpiredDiscounts()
     }
-  }, [searchText])
-
-  useEffect(() => {
-    tourStore.fetchAllTours()
-  }, [])
-
-  const debounceSearch = debounce((searchKeyword: string) => {
-    setSearchText(searchKeyword)
-  }, 500)
-
+  }, [isValid])
+  
   return (
     <Box paddingX={{ base: 6, lg: 8 }} paddingY={6}>
-      <HStack justify="space-between" spacing={4} marginBottom={6}>
-        <InputGroup borderRadius="6px" maxWidth="400px" background="white">
-          <InputLeftElement pointerEvents="none">
-            <Search2Icon color="gray.400" />
-          </InputLeftElement>
-          <Input
-            type="search"
-            placeholder="Search discount by code"
-            onChange={(event) => debounceSearch(event?.target?.value)}
-          />
-        </InputGroup>
-        <Button
-          colorScheme="teal"
-          onClick={() => {
-            setDiscountId('')
-            setIsOpenDiscountForm(true)
-          }}
-        >
-          Create New Discount
-        </Button>
+      <HStack spacing={4} marginBottom={6}>
+        <HStack spacing={0}>
+          <Button
+            width="120px"
+            color={isValid ? 'white' : 'black'}
+            background={isValid ? 'teal' : 'gray.200'}
+            _hover={{ background: isValid ? 'teal' : 'gray.300' }}
+            borderRightRadius={0}
+            onClick={() => setIsValid(true)}
+          >
+            Valid
+          </Button>
+          <Button
+            width="120px"
+            color={isValid ? 'black' : 'white'}
+            background={isValid ? 'gray.200' : 'teal'}
+            _hover={{ background: isValid ? 'gray.300' : 'teal' }}
+            borderLeftRadius={0}
+            onClick={() => setIsValid(false)}
+          >
+            Expired
+          </Button>
+        </HStack>
       </HStack>
       <Table
         headerList={getHeaderList()}
@@ -129,16 +85,6 @@ const DiscountManagement = () => {
         pageSize={pageSize}
         setPageSize={setPageSize}
         isManualSort
-      />
-      <DiscountForm discountId={discountId} isOpen={isOpenDiscountForm} onClose={() => setIsOpenDiscountForm(false)} />
-      <ConfirmModal
-        titleText="Delete Discount"
-        bodyText={<Text>Are you sure to delete this discount?{<br />}This action can not be undo</Text>}
-        cancelButtonText="No, keep this discount"
-        confirmButtonText="Yes, delete"
-        isOpen={isDeleting}
-        onClose={() => setIsDeleting(false)}
-        onClickAccept={handleDeleteDiscount}
       />
     </Box>
   )

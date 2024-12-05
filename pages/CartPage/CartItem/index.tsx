@@ -3,7 +3,6 @@ import { Button, Checkbox, HStack, Img, Input, Text, VStack } from '@chakra-ui/r
 import { ICart } from 'interfaces/cart'
 import { getProductImageUrl } from 'utils/common'
 import { toast } from 'react-toastify'
-import { deleteCart } from 'API/cart'
 
 
 interface ICartItemProps {

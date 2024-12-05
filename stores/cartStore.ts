@@ -56,7 +56,7 @@ class CartStrores {
     this.myCarts = response
   }
 
-  async fetchReviewCheckout(payload: IOrder[]): Promise<void> {
+  async fetchReviewCheckout(payload: any): Promise<void> {
     const response = await getReviewCheckout(payload)
     this.reviewCheckout = response
   }

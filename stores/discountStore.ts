@@ -1,4 +1,4 @@
-import { getAllDiscounts, getDiscountDetail, searchDiscounts } from 'API/discount'
+import { getValidDiscounts, getExpiredDiscounts, getDiscountDetail, searchDiscounts } from 'API/discount'
 import { IDiscount } from 'interfaces/discount'
 import { makeAutoObservable } from 'mobx'
 import RootStore from 'stores'
@@ -21,10 +21,14 @@ class DiscountStore {
     this.totalCount = result
   }
 
-  async fetchAllDiscounts(): Promise<void> {
-    const { discounts, result } = await getAllDiscounts()
-    this.discounts = discounts
-    this.totalCount = result
+  async fetchValidDiscounts(): Promise<void> {
+    const response = await getValidDiscounts('')
+    this.discounts = response
+  }
+
+  async fetchExpiredDiscounts(): Promise<void> {
+    const response = await getExpiredDiscounts('')
+    this.discounts = response
   }
 
   async fetchDiscountDetail(discountId: string): Promise<void> {

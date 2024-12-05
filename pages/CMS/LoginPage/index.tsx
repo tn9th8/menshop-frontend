@@ -31,13 +31,13 @@ const LoginPage = () => {
   async function onSubmit(data: ILoginForm): Promise<void> {
     try {
       setIsLoading(true)
-      await authStore.login(data, PLATFORM.CMS)
+      await authStore.login(data)
       setIsLoading(false)
-      toast.success('Login successfully')
-      router.push(routes.cms.bookingManagement.value)
+      toast.success('Đăng nhập thành công')
+      router.push(routes.cms.orderManagement.value)
     } catch (error) {
       setIsLoading(false)
-      toast.error('Login failed')
+      toast.error('Đăng nhập thất bại')
     }
   }
 

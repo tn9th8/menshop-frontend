@@ -10,3 +10,7 @@ export async function getMyShop(): Promise<IShop> {
   const response = await api.get('/api/v1/seller/shops')
   return response?.data?.data
 }
+
+export async function updateMyShop(data: IShop): Promise<void> {
+  await api.patch('/api/v1/seller/shops', data)
+}
