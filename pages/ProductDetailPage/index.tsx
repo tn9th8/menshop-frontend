@@ -80,8 +80,8 @@ const ProductDetailPage = () => {
         <HStack width="full" align="flex-start" padding={12} spacing={8}>
           <VStack width="50%" align="flex-start" spacing={6}>
             <Img
-              height="700px"
-              borderRadius={6}
+              boxSize="586px"
+              borderRadius={16}
               src={getProductImageUrl(currentImage)}
               alt={productDetail?.name}
             />
@@ -113,44 +113,48 @@ const ProductDetailPage = () => {
                 Sản phẩm giao hàng từ Hồ Chí Minh
               </Text>
             </VStack>
-            <VStack align="flex-start" spacing={1}>
-              <Text color="gray.700" fontSize="sm">
-                {productDetail?.variationFirst?.name + ':'}
-              </Text>
-              <HStack>
-                {productDetail?.variationFirst?.options.map((option, index) => (
-                  <Button 
-                    key={index}
-                    size="sm"
-                    color={option === selectedVariationFirst ? 'white' : 'gray.700'}
-                    background={option === selectedVariationFirst ? 'teal.500' : 'gray.300'}
-                    _hover={{ opacity: 0.7 }}
-                    onClick={() => setSelectedVariationFirst(option)}
-                  >
-                    {option}
-                  </Button>
-                ))}
-              </HStack>
-            </VStack>
-            <VStack align="flex-start" spacing={1}>
-              <Text color="gray.700" fontSize="sm">
-                {productDetail?.variationSecond?.name + ':'}
-              </Text>
-              <HStack>
-                {productDetail?.variationSecond?.options.map((option, index) => (
-                  <Button 
-                    key={index}
-                    size="sm"
-                    color={option === selectedVariationSecond ? 'white' : 'gray.700'}
-                    background={option === selectedVariationSecond ? 'teal.500' : 'gray.300'}
-                    _hover={{ opacity: 0.7 }}
-                    onClick={() => setSelectedVariationSecond(option)}
-                  >
-                    {option}
-                  </Button>
-                ))}
-              </HStack>
-            </VStack>
+            {productDetail?.variationFirst && productDetail?.variationSecond && (
+              <>
+                <VStack align="flex-start" spacing={1}>
+                  <Text color="gray.700" fontSize="sm">
+                    {productDetail?.variationFirst?.name + ':'}
+                  </Text>
+                  <HStack>
+                    {productDetail?.variationFirst?.options.map((option, index) => (
+                      <Button 
+                        key={index}
+                        size="sm"
+                        color={option === selectedVariationFirst ? 'white' : 'gray.700'}
+                        background={option === selectedVariationFirst ? 'teal.500' : 'gray.300'}
+                        _hover={{ opacity: 0.7 }}
+                        onClick={() => setSelectedVariationFirst(option)}
+                      >
+                        {option}
+                      </Button>
+                    ))}
+                  </HStack>
+                </VStack>
+                <VStack align="flex-start" spacing={1}>
+                  <Text color="gray.700" fontSize="sm">
+                    {productDetail?.variationSecond?.name + ':'}
+                  </Text>
+                  <HStack>
+                    {productDetail?.variationSecond?.options.map((option, index) => (
+                      <Button 
+                        key={index}
+                        size="sm"
+                        color={option === selectedVariationSecond ? 'white' : 'gray.700'}
+                        background={option === selectedVariationSecond ? 'teal.500' : 'gray.300'}
+                        _hover={{ opacity: 0.7 }}
+                        onClick={() => setSelectedVariationSecond(option)}
+                      >
+                        {option}
+                      </Button>
+                    ))}
+                  </HStack>
+                </VStack>
+              </>
+            )}
             <VStack align="flex-start" spacing={1}>
               <Text color="gray.700" fontSize="sm">
                 Số lượng:

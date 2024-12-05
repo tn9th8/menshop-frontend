@@ -3,7 +3,10 @@ import { IProduct } from 'interfaces/product'
 export interface IOrder {
   _id: string
   client: string
-  shop: string
+  shop: {
+    _id: string
+    name: string
+  }
   payment: string
   status: string
   phone: string

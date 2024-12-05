@@ -14,6 +14,7 @@ import { ICart } from "interfaces/cart"
 import { deleteCart } from "API/cart"
 import { toast } from "react-toastify"
 import { getReviewCheckout } from "API/order"
+import dayjs from "dayjs"
 
 const CartPage = () => {
   const { cartStore, authStore } = useStores() 
@@ -36,7 +37,7 @@ const CartPage = () => {
         productItem => selectedCartItems.includes(productItem?._id)
       )
       return {
-        discountCodes: [],
+        discountCodes: getValidArray(cart?.discounts).map(discount => discount?.code),
         shop: cart?.shop?._id,
         productItems: seletedProductItems?.map(productItem => productItem?._id)
       }
@@ -97,9 +98,16 @@ const CartPage = () => {
             <Title text="Giỏ hàng" />
             {myCarts?.map((cartItem: ICart, index: number) => (
               <VStack key={index} width="full" align="flex-start">
-                <Tag size="lg" color="white" background="teal.500">
-                  {cartItem?.shop?.name}
-                </Tag>
+                <HStack width="full" spacing={4}>
+                  <Tag size="lg" color="teal.500" background="white" border="2px solid" borderColor="teal.500">
+                    {cartItem?.shop?.name}
+                  </Tag>
+                  <HStack hidden={cartItem?.discounts?.length === 0}>
+                    <Text>
+                      {cartItem?.discounts[0]?.name} đến hết ngày {dayjs(cartItem?.discounts[0]?.endDate).format('DD/MM/YYYY')} cho đơn hàng từ {formatCurrency(cartItem?.discounts[0]?.minPurchaseValue ?? 0)}
+                    </Text>
+                  </HStack>
+                </HStack>
                 <CartItem
                   cartItem={cartItem}
                   selectedCartItems={selectedCartItems}
@@ -130,15 +138,37 @@ const CartPage = () => {
               padding="12px 20px"
               border="2px solid #ccc"
               borderRadius="8px"
+              spacing={3}
             >
               <HStack
                 width="full"
                 justifyContent="space-between"
                 fontSize="lg"
-                fontWeight="bold"
+              >
+                <Text>Tổng giá tiền:</Text>
+                <Text fontWeight="bold">
+                  {formatCurrency(reviewCheckout?.checkoutOrder?.totalPrice ?? 0)}
+                </Text>
+              </HStack>
+              <HStack
+                width="full"
+                justifyContent="space-between"
+                fontSize="lg"
+              >
+                <Text>Giảm giá:</Text>
+                <Text fontWeight="bold">
+                  {formatCurrency(reviewCheckout?.checkoutOrder?.totalDiscount ?? 0)}
+                </Text>
+              </HStack>
+              <HStack
+                width="full"
+                justifyContent="space-between"
+                fontSize="lg"
               >
                 <Text>Tổng thanh toán:</Text>
-                <Text>{formatCurrency(reviewCheckout?.checkoutOrder?.totalCheckout ?? 0)}</Text>
+                <Text fontWeight="bold">
+                  {formatCurrency(reviewCheckout?.checkoutOrder?.totalCheckout ?? 0)}
+                </Text>
               </HStack>
               <Button
                 width="full"

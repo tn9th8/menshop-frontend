@@ -11,6 +11,7 @@ export interface ICart {
     _id: string
     name: string
   }
+  discounts: any[]
 }
 
 export interface IListCart {

@@ -13,6 +13,9 @@ const cmsRoutes = {
     accountSettings: {
       value: '/cms/account-settings'
     },
+    orderManagement: {
+      value: '/cms/order-management',
+    },
     bookingManagement: {
       value: '/cms/booking-management',
       detail: {
@@ -32,6 +35,7 @@ const cmsRoutes = {
       value: '/cms/account-management',
     },
     discountManagement: {
+      value: '/cms/discount-management',
       detail: {
         value: (discountId: string) => `/cms/discount-management/${discountId}`
       }

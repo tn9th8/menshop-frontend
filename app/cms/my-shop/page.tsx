@@ -3,7 +3,7 @@ import MyShopPage from 'pages/CMS/MyShopPage'
 
 const MyShopPagePage = () => {
   return (
-    <CMSLayout title="Shop Management" topBarTitle="Shop Management">
+    <CMSLayout title="Quản lý cửa hàng" topBarTitle="Quản lý cửa hàng">
       <MyShopPage />
     </CMSLayout>
   );

@@ -80,8 +80,8 @@ const OrderPage = () => {
             spacing={4}
           >
             <HStack width="full" justify="space-between">
-              <Tag size="lg" color="white" background="teal.500">
-                {myOrder?.shop}
+              <Tag size="lg" color="teal.500" background="white" border="2px solid" borderColor="teal.500">
+                {myOrder?.shop?.name}
               </Tag>
               <Text color="teal.500" fontWeight={600}>
                 {getStatusLabel(myOrder?.status)}
