@@ -10,7 +10,7 @@ export function getValidArray<T>(array?: T[]): T[] {
   return checkValidArray<T>(array) ? array || [] : []
 }
 
-export function getAccessToken(platform: PLATFORM): string {
+export function getAccessToken(): string {
   return ''
   return localStorage.getItem(`accessToken`) ?? sessionStorage.getItem(`accessToken`) ?? ''
 }

@@ -10,16 +10,11 @@ import { useRouter } from 'next/navigation'
 import routes from 'routes'
 import { getAccessToken, getAvatarUrl } from 'utils/common'
 
-interface IUserProfileProps {
-  platform: PLATFORM
-}
-
-const UserProfile = (props: IUserProfileProps) => {
-  const { platform } = props
+const UserProfile = () => {
   const { authStore } = useStores()
   const { user } = authStore
   const router = useRouter()
-  const accessToken: string = getAccessToken(platform)
+  const accessToken: string = getAccessToken()
   const isLogin: boolean = !!accessToken
 
   function gotoProfilePage(): void {
@@ -27,7 +22,7 @@ const UserProfile = (props: IUserProfileProps) => {
   }
 
   function handleLogout() {
-    authStore.logout(platform)
+    authStore.logout()
     router.push(routes.cms.login.value)
   }
 

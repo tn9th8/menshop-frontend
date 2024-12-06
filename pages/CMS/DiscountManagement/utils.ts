@@ -5,23 +5,19 @@ export function getHeaderList() {
       accessor: 'code',
     },
     {
-      Header: 'NAME',
+      Header: 'Tên khuyến mãi',
       accessor: 'name',
     },
     {
-      Header: 'TYPE',
-      accessor: 'type',
-    },
-    {
-      Header: 'APPLIES TO',
+      Header: 'Áp dụng',
       accessor: 'applyTo',
     },
     {
-      Header: 'START DATE',
+      Header: 'Ngày bắt đầu',
       accessor: 'startDate',
     },
     {
-      Header: 'END DATE',
+      Header: 'Ngày kết thúc',
       accessor: 'endDate',
     },
     {

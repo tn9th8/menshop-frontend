@@ -1,27 +1,16 @@
 'use client'
-import { ChangeEvent, createElement, forwardRef, useEffect, useRef, useState } from 'react'
-import { Box, Button, HStack, Img, SimpleGrid, Text, VStack } from '@chakra-ui/react'
-import { uploadUserImage } from 'API/upload'
-import { updateUser } from 'API/user'
-import DateInput from 'components/DateInput'
+import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { Box, Button, HStack, Img, SimpleGrid, Text, Textarea, VStack } from '@chakra-ui/react'
 import FormInput from 'components/FormInput'
-import dayjs from 'dayjs'
-import { EGender, ERole } from 'enums/user'
 import { useStores } from 'hooks/useStores'
 import { IShop } from 'interfaces/shop'
-import omit from 'lodash/omit'
 import { observer } from 'mobx-react'
 import { usePathname, useRouter } from 'next/navigation'
-import DatePicker from 'react-datepicker'
-import { FormProvider, useForm, useWatch } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import routes from 'routes'
-import { PLATFORM } from 'enums/common'
 import { getShopImageUrl } from 'utils/common'
-
-interface IUpdateAccountForm extends IShop {
-  status: string
-}
+import { updateMyShop } from 'API/shop'
 
 const MyShopPage = () => {
   const { userStore, shopStore } = useStores()
@@ -31,7 +20,7 @@ const MyShopPage = () => {
   const pathname = usePathname()
   const fileInputRef = useRef<any>(null)
   const userId = pathname?.split('/').pop() ?? ''
-  const methods = useForm<IUpdateAccountForm>()
+  const methods = useForm()
   const { control, handleSubmit, reset, register, setValue } = methods
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isImageLoading, setIsImageLoading] = useState<boolean>(false)
@@ -58,19 +47,26 @@ const MyShopPage = () => {
     }
   }
 
-  async function onSubmit(data: IUpdateAccountForm) {
+  async function onSubmit(data: any) {
+    console.log(data)
     setIsLoading(true)
     try {
-      // const userData = {
-      //   ...omit(data, 'status'),
-      //   isActive: data?.status === 'Active'
-      // }
-      // await updateUser(userId, userData)
-      // await userStore.fetchUserDetail(userId, PLATFORM.CMS)
-      toast.success('Update account successfully')
+      const payload: any = {
+        id: myShop?._id,
+        name: data?.name,
+        description: data?.description,
+        // seller: {
+        //   email: data?.seller?.email,
+        //   phone: data?.seller?.phone,
+        //   name: data?.seller?.name,
+        // },
+      }
+      await updateMyShop(payload)
+      await shopStore.fetchMyShop()
+      toast.success('Câp nhật thông tin thành công')
     } catch (error) {
       setIsLoading(false)
-      toast.error('Update account failed')
+      toast.error('Cập nhật thông tin thất bại')
     } finally {
       setIsLoading(false)
     }
@@ -95,9 +91,6 @@ const MyShopPage = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <HStack width="full" justify="flex-end" marginBottom={6}>
             <HStack spacing={4}>
-              <Button background="white" borderWidth={1} borderColor="gray.300" isLoading={isLoading} onClick={backToAccountList}>
-                Cancel
-              </Button>
               <Button type="submit" colorScheme="teal" variant="solid" paddingX={4} isLoading={isLoading}>
                 Save
               </Button>
@@ -107,68 +100,14 @@ const MyShopPage = () => {
             <Box width="full" background="white" padding={8} borderRadius={8} borderWidth={1} boxShadow="sm">
               <SimpleGrid maxWidth="1200px" columns={{ base: 1, md: 2 }} gap={6}>
                 <FormInput name="name" label="Tên cửa hàng" />
+                <FormInput name="seller.name" label="Chủ cửa hàng" />
                 <FormInput name="seller.email" label="Email" />
                 <FormInput name="seller.phone" label="Số điện thoại" />
-                <FormInput name="seller.name" label="Chủ cửa hàng" />
-                <FormInput name="description" label="Mô tả" />
-                {/* <FormInput name="dateOfBirth" label="Date Of Birth">
-                  <DatePicker
-                    {...register('dateOfBirth')}
-                    selected={dateOfBirth}
-                    dateFormat="MM/dd/yyyy"
-                    onChange={(date: Date) => setValue('dateOfBirth', dayjs(date).toDate(), { shouldDirty: true })}
-                    customInput={createElement(forwardRef(DateInput))}
-                  />
-                </FormInput> */}
-                {/* <FormInput name="passport" label="Passport" />
-                <FormInput name="dateOfIssuePassport" label="Date Of Issue Passport">
-                  <DatePicker
-                    {...register('dateOfIssuePassport')}
-                    selected={dateOfIssuePassport}
-                    dateFormat="MM/dd/yyyy"
-                    onChange={(date: Date) => setValue('dateOfIssuePassport', dayjs(date).toDate(), { shouldDirty: true })}
-                    customInput={createElement(forwardRef(DateInput))}
-                  />
+              </SimpleGrid>
+              <SimpleGrid maxWidth="1200px" columns={1} marginTop={6}>
+                <FormInput name="" label="Mô tả">
+                  <Textarea {...register('description')} focusBorderColor="teal.500" />
                 </FormInput>
-                <FormInput name="dateOfExpirationPassport" label="Date Of Expiration Passport">
-                  <DatePicker
-                    {...register('dateOfExpirationPassport')}
-                    selected={dateOfExpirationPassport}
-                    dateFormat="MM/dd/yyyy"
-                    onChange={(date: Date) => setValue('dateOfExpirationPassport', dayjs(date).toDate(), { shouldDirty: true })}
-                    customInput={createElement(forwardRef(DateInput))}
-                  />
-                </FormInput> */}
-                {/* <FormControl id="role" marginBottom={6}>
-                  <FormLabel marginBottom={4} color="gray.700">
-                    Account Role
-                  </FormLabel>
-                  <RadioGroup value={role}>
-                    <HStack spacing={2} flexDirection="row" gap="42px">
-                      <Radio colorScheme="teal" {...register('role')} value={ERole.ADMIN}>
-                        Admin
-                      </Radio>
-                      <Radio colorScheme="teal" {...register('role')} value={ERole.GUIDE}>
-                        Guide
-                      </Radio>
-                    </HStack>
-                  </RadioGroup>
-                </FormControl>
-                <FormControl id="gender" marginBottom={6}>
-                  <FormLabel marginBottom={4} color="gray.700">
-                    Gender
-                  </FormLabel>
-                  <RadioGroup value={gender}>
-                    <HStack spacing={2} flexDirection="row" gap="42px">
-                      <Radio colorScheme="teal" {...register('gender')} value={EGender.MALE}>
-                        Male
-                      </Radio>
-                      <Radio colorScheme="teal" {...register('gender')} value={EGender.FEMALE}>
-                        Femail
-                      </Radio>
-                    </HStack>
-                  </RadioGroup>
-                </FormControl> */}
               </SimpleGrid>
             </Box>
             <VStack maxWidth={300} width="full" spacing={6}>

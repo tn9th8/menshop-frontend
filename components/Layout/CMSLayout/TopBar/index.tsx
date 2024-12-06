@@ -42,7 +42,7 @@ const TopBar = (props: ITopBarProps) => {
           {title}
         </Text>
       </HStack>
-      <UserProfile platform={PLATFORM.CMS} />
+      <UserProfile />
     </HStack>
   )
 }

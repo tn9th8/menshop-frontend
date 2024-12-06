@@ -12,7 +12,7 @@ export default class AuthStore {
   rootStore: RootStore
   token: string = ''
   user: IUser = {} as IUser
-  isLogin: boolean = !!getAccessToken(PLATFORM.WEBSITE)
+  isLogin: boolean = !!getAccessToken()
 
   constructor(rootStore: RootStore) {
     makeAutoObservable(this, { rootStore: false, token: false })
@@ -71,13 +71,13 @@ export default class AuthStore {
   }
 
 
-  logout(platform: PLATFORM): void {
+  logout(): void {
     this.isLogin = false
     this.token = ''
     this.user = {} as IUser
-    localStorage.removeItem(`${platform}Token`)
-    localStorage.removeItem(`${platform}UserId`)
-    sessionStorage.removeItem(`${platform}Token`)
-    sessionStorage.removeItem(`${platform}UserId`)
+    localStorage.removeItem(`accessToken`)
+    localStorage.removeItem(`userId`)
+    sessionStorage.removeItem(`accessToken`)
+    sessionStorage.removeItem(`userId`)
   }
 }

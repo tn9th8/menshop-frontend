@@ -33,6 +33,7 @@ const DiscountManagement = () => {
   const dataInTable = getValidArray(discounts).map(discount => {
     return {
       ...discount,
+      applyTo: 'Tất cả sản phẩm',
       startDate: dayjs(discount?.startDate).format('DD/MM/YYYY'),
       endDate: dayjs(discount?.endDate).format('DD/MM/YYYY'),
       actions: (
@@ -63,24 +64,24 @@ const DiscountManagement = () => {
       <HStack spacing={4} marginBottom={6} justify="space-between">
         <HStack spacing={0}>
           <Button
-            width="120px"
+            width="150px"
             color={isValid ? 'white' : 'black'}
             background={isValid ? 'teal' : 'gray.200'}
             _hover={{ background: isValid ? 'teal' : 'gray.300' }}
             borderRightRadius={0}
             onClick={() => setIsValid(true)}
           >
-            Valid
+            Đang hoạt động
           </Button>
           <Button
-            width="120px"
+            width="150px"
             color={isValid ? 'black' : 'white'}
             background={isValid ? 'gray.200' : 'teal'}
             _hover={{ background: isValid ? 'gray.300' : 'teal' }}
             borderLeftRadius={0}
             onClick={() => setIsValid(false)}
           >
-            Expired
+            Đã hết hạn
           </Button>
         </HStack>
         <Button colorScheme="teal" onClick={() => setSelectedDiscountId('')}>

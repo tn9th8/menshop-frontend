@@ -21,7 +21,7 @@ export async function getAllUsers(filter = '') {
 export async function getUserById(userId: string): Promise<IUser> {
   try {
     const response = await api.get(`api/v1/admin/users/${userId}`)
-    return response.data
+    return response?.data?.data
   } catch (error) {
     handleError(error as Error, 'API/user', 'getUserById')
     const errorMessage: string = get(error, 'data.error.message', '') || JSON.stringify(error)

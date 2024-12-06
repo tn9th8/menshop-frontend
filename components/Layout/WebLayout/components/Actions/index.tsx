@@ -3,12 +3,12 @@ import { PiTicketBold } from "react-icons/pi";
 import { useRouter } from "next/navigation";
 import { LuShoppingCart } from "react-icons/lu";
 import routes from "routes";
-import UserProfile from "../UserProfile";
 import ActionItem from "./ActionItem";
 import { useStores } from "hooks";
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { IRequestTour, IRequsetCheckoutReview } from "interfaces/checkout";
+import UserProfile from "components/UserProfile";
 
 interface IHeaderProps {
   openLoginModal: () => void;
@@ -65,12 +65,7 @@ const Action = (props: IHeaderProps) => {
         title="Gỉỏ hàng"
         to={gotoCartPage}
       />
-      <UserProfile
-        underLineHoverColor="teal.500"
-        hoverColor="teal.500"
-        color={color}
-        openLoginModal={openLoginModal}
-      />
+      <UserProfile />
     </HStack>
   );
 };
