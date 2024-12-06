@@ -7,10 +7,11 @@ import truncate from 'lodash/truncate'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import routes from 'routes'
 import { getAccessToken, getAvatarUrl } from 'utils/common'
 
-const UserProfile = () => {
+const UserProfile = ({ isHideEmail = true }: { isHideEmail?: boolean }) => {
   const { authStore } = useStores()
   const { user } = authStore
   const router = useRouter()
@@ -26,6 +27,10 @@ const UserProfile = () => {
     router.push(routes.cms.login.value)
   }
 
+  useEffect(() => {
+    authStore.getMyUser()
+  }, [])
+
   return (
     <Menu autoSelect={false} computePositionOnMount placement="bottom-end">
       <MenuButton
@@ -36,7 +41,7 @@ const UserProfile = () => {
       >
         <HStack spacing={3} order={{ base: 1, md: 2 }} flex="1">
           <Avatar size="sm" name={user?.name} src={getAvatarUrl(user?.avatar)} background="gray.400" />
-          <Flex flexDirection="column" display={{ base: 'none', md: 'flex' }} alignItems="flex-start">
+          <Flex flexDirection="column" display={{ base: 'none', md: 'flex' }} alignItems="flex-start" hidden={isHideEmail}>
             <Text fontSize="sm" fontWeight="500" lineHeight="5" marginBottom={1}>
               {truncate(user?.name)}
             </Text>
