@@ -44,11 +44,21 @@ const ProductDetailPage = () => {
       toast.error('Có lỗi xảy ra, vui lòng thử lại sau')
       return
     }
+    let variant = ""
+    if (selectedVariationFirst) {
+      variant = variant + selectedVariationFirst
+    }
+    if (selectedVariationSecond) {
+      variant = variant + ", " + selectedVariationSecond
+    }
+    if (!variant) {
+      variant = "duy nhất"
+    }
     const data = {
       product: productDetail?._id,
       shop: productDetail?.shop?._id,
       quantity,
-      variant: `${selectedVariationFirst}, ${selectedVariationSecond}`,
+      variant,
     }
     await addToCart(data)
     toast.success('Thêm vào giỏ hàng thành công')
