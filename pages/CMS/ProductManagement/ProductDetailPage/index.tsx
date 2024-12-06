@@ -10,6 +10,7 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import routes from 'routes'
 import { toast } from 'react-toastify'
 import { getProductImageUrl } from 'utils/common'
+import { updateProduct } from 'API/product'
 
 
 const ProductDetailPage = () => {
@@ -40,8 +41,8 @@ const ProductDetailPage = () => {
     try { 
       const formData = new FormData()
       formData.append('file', event.target.files[0])
-      const imageUrl: string = await uploadFiles(formData)
-      setValue('thumb', imageUrl)
+      const thumb: string = await uploadFiles(formData)
+      await updateProduct({ id: productId, thumb })
     } catch (error) {
       setIsThumbLoading(false)
       toast.error('Upload thumb failed')
@@ -104,7 +105,6 @@ const ProductDetailPage = () => {
               background="white"
               padding={8}
               borderRadius={8}
-              borderWidth={1}
               boxShadow="sm"
               spacing={4}
             >

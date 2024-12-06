@@ -7,8 +7,8 @@ import get from 'lodash/get'
 const UPLOAD_URL = '/api/v1/upload'
 
 export async function uploadFiles(data: FormData): Promise<string> {
-  await api.post('api/v1/admin/files/upload', data)
-  return ''
+  const response = await api.post('api/v1/admin/files/upload', data)
+  return response?.data?.data?.file
 }
 
 export async function uploadImage(type: string, data: FormData): Promise<string> {

@@ -2,27 +2,33 @@ import { ChangeEvent, useState } from 'react'
 import { Button, Checkbox, HStack, Img, Input, Text, VStack } from '@chakra-ui/react'
 import { ICart } from 'interfaces/cart'
 import { getProductImageUrl } from 'utils/common'
-import { toast } from 'react-toastify'
 
 
 interface ICartItemProps {
   cartItem: ICart
   selectedCartItems: string[]
   handleSelectCartItem: (cartItems: string) => void
+  handleUpdateQuantity: (id: string, quantity: number) => void
   handleDeleteCartItem: (id: string) => void
 }
 
 const CartItem = (props: ICartItemProps) => {
-  const { cartItem, selectedCartItems = [], handleSelectCartItem, handleDeleteCartItem } = props
+  const { cartItem, selectedCartItems = [], handleSelectCartItem, handleUpdateQuantity, handleDeleteCartItem } = props
 
   const [quantity, setQuantity] = useState<number>(1)
 
-  function handleIncrease() {
-    setQuantity((prev) => prev + 1)
+  function handleIncrease(id: string) {
+    const productItem = cartItem?.productItems?.find((productItem) => productItem?._id === id)
+    if (productItem) {
+      handleUpdateQuantity(id, productItem?.quantity + 1)
+      setQuantity((prev) => prev + 1)
+    }
   }
 
-  function handleDecrease() {
-    if (quantity > 1) {
+  function handleDecrease(id: string) {
+    const productItem = cartItem?.productItems?.find((productItem) => productItem?._id === id)
+    if (productItem) {
+      handleUpdateQuantity(id, productItem?.quantity - 1)
       setQuantity((prev) => prev - 1)
     }
   }
@@ -77,7 +83,7 @@ const CartItem = (props: ICartItemProps) => {
                 Phân loại hàng: {productItem?.variant}
               </Text>
               <HStack spacing={2}>
-                <Button size="sm" border="1px solid #CBD5E0" onClick={handleDecrease} isDisabled={productItem?.quantity <= 1}>
+                <Button size="sm" border="1px solid #CBD5E0" onClick={() => handleDecrease(productItem?._id)} isDisabled={productItem?.quantity <= 1}>
                   -
                 </Button>
                 <Input
@@ -90,7 +96,7 @@ const CartItem = (props: ICartItemProps) => {
                   type="number"
                   borderRadius={6}
                 />
-                <Button size="sm" border="1px solid #CBD5E0" onClick={handleIncrease}>+</Button>
+                <Button size="sm" border="1px solid #CBD5E0" onClick={() => handleIncrease(productItem?._id)}>+</Button>
               </HStack>
             </HStack>
             <Text color="gray.700" fontSize="lg" fontWeight={600}>
