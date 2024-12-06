@@ -17,7 +17,7 @@ import { getReviewCheckout } from "API/order"
 import dayjs from "dayjs"
 
 const CartPage = () => {
-  const { cartStore, authStore } = useStores() 
+  const { cartStore } = useStores() 
   const { listCart, myCarts, reviewCheckout } = cartStore
   const [selectedCartItems, setSelectedCartItems] = useState<string[]>([])
 

@@ -9,6 +9,8 @@ import { observer } from "mobx-react"
 import { formatCurrency, getProductImageUrl, getValidArray } from "utils/common"
 import { toast } from "react-toastify"
 import { cancelOrder, getReviewCheckout } from "API/order"
+import { IOrder } from "interfaces/order"
+import { addToCart } from "API/cart"
 
 const statusTabs = [
   { value: 'all', label: 'Tất cả' },
@@ -33,7 +35,21 @@ const OrderPage = () => {
   async function handleCancelOrder(orderId: string) {
     await cancelOrder(orderId)
     setStatus('cancelled')
-    toast.success('Đã hủy đơn hàng')
+    toast.success('Đã hủy đơn hàng thành công')
+  }
+
+  async function handleBuyOrder(currentOrder: IOrder) {
+    const promises = getValidArray(currentOrder?.productItems).map(productItem => {
+      const data = {
+        product: productItem?.product?._id,
+        shop: currentOrder?.shop?._id,
+        quantity: productItem?.quantity,
+        variant: productItem?.variant,
+      }
+      return addToCart(data)
+    })
+    await Promise.all(promises)
+    router.push(routes.cart.value)
   }
 
   useEffect(() => {
@@ -122,6 +138,11 @@ const OrderPage = () => {
               {myOrder?.status === 'pending' && (
                 <Button border="1px solid #E2E8F0" background="white" onClick={() => handleCancelOrder(myOrder?._id)}>
                   Hủy đơn hàng
+                </Button>
+              )}
+              {myOrder?.status === 'cancelled' && (
+                <Button border="1px solid #E2E8F0" background="white" onClick={() => handleBuyOrder(myOrder)}>
+                  Mua lại
                 </Button>
               )}
             </VStack>
