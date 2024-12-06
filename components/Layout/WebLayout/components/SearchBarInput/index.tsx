@@ -52,81 +52,41 @@ const SearchBarInput = (props: ISearchInputProps) => {
   }, [debounceVal])
 
   return (
-    <Tippy
-      interactive
-      visible={isShow && searchResult}
-      render={() => (
-        <VStack
-          alignItems="center"
-          justifyContent="center"
-          maxWidth="400px"
-          width='full'
-          minHeight="100px"
-          height='full'
-          borderRadius="8px"
-          padding="8px 16px 16px 16px"
-          background="#fff"
-          boxShadow="rgba(0, 0, 0, 0.12) 0px 2px 12px"
-        >
-          {suggestions.map((tours) => (
-            <SearchItem
-              key={tours?._id}
-              _id={tours?._id}
-              type={tours?.type}
-              imgsrc={tours?.thumbnail}
-              title={tours?.title}
-            />
-          ))}
-        </VStack>
-      )}
-      onClickOutside={handleClickOutSide}
+    <HStack
+      minWidth="515px"
+      minHeight={`${minHeight}`}
+      width="full"
+      height="full"
+      background="#fff"
+      borderRadius="8px"
+      border="2px solid #dcdfe4"
+      justifyContent="space-between"
+      padding="0px 8px"
+      _focusWithin={{
+        borderColor: "#64CCC5",
+      }}
     >
-      <HStack
-        minWidth="515px"
-        minHeight={`${minHeight}`}
-        width="full"
-        height="full"
-        background="#fff"
-        borderRadius="8px"
-        border="2px solid #dcdfe4"
-        justifyContent="space-between"
-        padding="0px 8px"
-        _focusWithin={{
-          borderColor: "#64CCC5",
-        }}
-      >
-        <InputGroup padding="0px 16px">
-          <InputLeftElement pointerEvents="none" width="40px" height="40px">
-            <Search2Icon color="#1A2B49" boxSize="20px" />
-          </InputLeftElement>
-          <Input
-            value={inputValue}
-            placeholder={placeholder}
-            paddingLeft={10}
-            border="none"
-            focusBorderColor="transparent"
-            fontSize="lg"
-            fontWeight="700"
-            onChange={(e) => {
-              setInputValue(e.target.value);
-            }}
-            onFocus={() => {
-              setIsShow(true)
-            }}
-          />
-        </InputGroup>
-        {/* <Button
-          width="95px"
-          height="32px"
-          colorScheme="teal"
-          fontSize="md"
-          borderRadius="99px"
-          onClick={handleGoToAllActivities}
-        >
-          Search
-        </Button> */}
-      </HStack>
-    </Tippy>
+      <InputGroup padding="0px 16px">
+        <InputLeftElement pointerEvents="none" width="40px" height="40px">
+          <Search2Icon color="#1A2B49" boxSize="20px" />
+        </InputLeftElement>
+        <Input
+          value={inputValue}
+          placeholder={placeholder}
+          paddingLeft={10}
+          border="none"
+          focusBorderColor="transparent"
+          fontSize="lg"
+          fontWeight="700"
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
+          onFocus={() => {
+            setIsShow(true)
+          }}
+        />
+      </InputGroup>
+    </HStack>
   )
 }
 
