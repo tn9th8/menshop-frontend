@@ -26,6 +26,8 @@ export interface IProduct {
     name: string
     options: string[]
   }
+  tags: string[]
+  categories: any[]
   createdAt: string
   updatedAt: string
 }

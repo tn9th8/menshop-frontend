@@ -30,21 +30,19 @@ export async function getAllDiscountsByShop(shop: string): Promise<any[]> {
 }
 
 export async function getValidDiscounts(params: string): Promise<any[]> {
-  const response = await api.get(`api/v1/admin/discounts/valid${params}`)
+  const response = await api.get(`api/v1/seller/discounts/valid${params}`)
   return response?.data?.data
 }
 
 export async function getExpiredDiscounts(params: string): Promise<any[]> {
-  const response = await api.get(`api/v1/admin/discounts/expired${params}`)
+  const response = await api.get(`api/v1/seller/discounts/expired${params}`)
   return response?.data?.data
 }
 
 export async function getDiscountDetail(discountId: string): Promise<IDiscount> {
   try {
-    const response = await api.get(`${DISCOUNT_URL}/${discountId}`, {
-      headers: auth(PLATFORM.CMS)
-    })
-    return response.data.metadata
+    const response = await api.get(`api/v1/seller/discounts/${discountId}`)
+    return response?.data?.data
   } catch (error) {
     handleError(error as Error, 'API/discount', 'getDiscountDetail')
     const errorMessage: string = get(error, 'data.error.message', '') || JSON.stringify(error)
@@ -54,9 +52,7 @@ export async function getDiscountDetail(discountId: string): Promise<IDiscount> 
 
 export async function createDiscount(discount: IDiscount): Promise<void> {
   try {
-    await api.post(DISCOUNT_URL, discount, {
-      headers: auth(PLATFORM.CMS)
-    })
+    await api.post('api/v1/seller/discounts', discount)
   } catch (error) {
     handleError(error as Error, 'API/discount', 'createDiscount')
     const errorMessage: string = get(error, 'data.error.message', '') || JSON.stringify(error)
@@ -65,11 +61,9 @@ export async function createDiscount(discount: IDiscount): Promise<void> {
 }
 
 
-export async function updateDiscount(discountId: string, discount: IDiscount): Promise<void> {
+export async function updateDiscount(discount: IDiscount): Promise<void> {
   try {
-    await api.post(`${DISCOUNT_URL}/${discountId}`, discount, {
-      headers: auth(PLATFORM.CMS)
-    })
+    await api.patch('api/v1/seller/discounts', discount)
   } catch (error) {
     handleError(error as Error, 'API/discount', 'updateDiscount')
     const errorMessage: string = get(error, 'data.error.message', '') || JSON.stringify(error)

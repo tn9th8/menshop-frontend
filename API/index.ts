@@ -30,7 +30,7 @@ api.interceptors.response.use(
     console.error('API', 'error', error)
     const errorMessage = error.response.data.message
     toast.error(errorMessage)
-    throw new Error(errorMessage)
+    // throw new Error(errorMessage)
   }
 )
 

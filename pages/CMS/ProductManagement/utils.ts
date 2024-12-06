@@ -1,4 +1,6 @@
+import { IOption } from 'components/Dropdown'
 import { ITableHeader } from 'components/Table'
+import { getValidArray } from 'utils/common'
 
 export function getHeaderList(): ITableHeader[] {
   return [
@@ -31,4 +33,11 @@ export function getHeaderList(): ITableHeader[] {
       accessor: 'actions',
     },
   ]
+}
+
+export function getCategoryOptions(category: any[]): IOption[] {
+  return getValidArray(category).map((item) => ({
+    label: item.name,
+    value: item._id,
+  }))
 }

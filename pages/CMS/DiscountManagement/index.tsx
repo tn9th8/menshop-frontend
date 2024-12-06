@@ -10,14 +10,17 @@ import { getHeaderList } from './utils'
 import { useRouter } from 'next/navigation'
 import routes from 'routes'
 import dayjs from 'dayjs'
+import DiscountForm from './DiscountForm'
 
 
 const DiscountManagement = () => {
   const { discountStore } = useStores()
-  const { discounts } = discountStore
+  const { discounts,  } = discountStore
   const [isValid, setIsValid] = useState<boolean>(true)
   const [pageIndex, setPageIndex] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
+  const [isShowForm, setIsShowForm] = useState<boolean>(false)
+  const [selectedDiscountId, setSelectedDiscountId] = useState<string>('')
   
   const router = useRouter()
 
@@ -28,17 +31,20 @@ const DiscountManagement = () => {
   }
 
   const dataInTable = getValidArray(discounts).map(discount => {
-    function gotoShopDetailPage(): void {
-      router.push(routes.cms.discountManagement.detail.value(discount?._id ?? ''))
-    }
-
     return {
       ...discount,
       startDate: dayjs(discount?.startDate).format('DD/MM/YYYY'),
       endDate: dayjs(discount?.endDate).format('DD/MM/YYYY'),
       actions: (
         <HStack width="86px" cursor="pointer" marginLeft="auto">
-          <Icon iconName="edit.svg" size={32} onClick={gotoShopDetailPage} />
+          <Icon
+            iconName="edit.svg"
+            size={32}
+            onClick={() => {
+              setIsShowForm(true)
+              setSelectedDiscountId(discount?._id ?? '')
+            }}
+          />
         </HStack>
       )
     }
@@ -54,7 +60,7 @@ const DiscountManagement = () => {
   
   return (
     <Box paddingX={{ base: 6, lg: 8 }} paddingY={6}>
-      <HStack spacing={4} marginBottom={6}>
+      <HStack spacing={4} marginBottom={6} justify="space-between">
         <HStack spacing={0}>
           <Button
             width="120px"
@@ -77,6 +83,9 @@ const DiscountManagement = () => {
             Expired
           </Button>
         </HStack>
+        <Button colorScheme="teal" onClick={() => setSelectedDiscountId('')}>
+          Tạo khuyến mãi
+        </Button>
       </HStack>
       <Table
         headerList={getHeaderList()}
@@ -86,6 +95,7 @@ const DiscountManagement = () => {
         setPageSize={setPageSize}
         isManualSort
       />
+      <DiscountForm isOpen={isShowForm} onClose={() => setIsShowForm(false)} discountId={selectedDiscountId} />
     </Box>
   )
 }

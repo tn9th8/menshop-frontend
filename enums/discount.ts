@@ -1,6 +1,6 @@
 export enum EDiscountType {
   PERCENTAGE = 'percentage',
-  FIXED_AMOUNT = 'fixed_amount'
+  FIXED_AMOUNT = 'fixedAmount'
 }
 
 export enum EDiscountAppliesTo {

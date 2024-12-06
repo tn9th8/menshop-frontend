@@ -30,7 +30,6 @@ interface IDiscountForm {
   code: string
   value: number
   type: string
-  minOrder: number
   appliesTo: string
   tours: string[]
   startDate: Date
@@ -38,6 +37,9 @@ interface IDiscountForm {
   typeValue: IOption
   appliesToValue: IOption
   tourValue: IOption
+  minPurchaseValue: number
+  applyMax: number
+  applyMaxPerClient: number
 }
 
 interface IDiscountFormProps {
@@ -77,19 +79,21 @@ const DiscountForm = (props: IDiscountFormProps) => {
       code: data?.code,
       value: data?.value,
       type: data?.typeValue?.value,
-      minOrder: data?.minOrder,
-      appliesTo: data?.appliesToValue?.value,
-      tours: isSpecific ? [data?.tourValue?.value] : undefined,
-      startDate: dayjs(data?.startDate).toDate(),
-      endDate: dayjs(data?.endDate).toDate(),
+      description: `Đơn hàng tối thiểu ${data?.minPurchaseValue} VNĐ`,
+      applyMaxPerClient: data?.applyMaxPerClient,
+      applyMax: Number(data?.applyMax),
+      minPurchaseValue: Number(data?.minPurchaseValue),
+      applyTo: 'all',
+      startDate: dayjs(data?.startDate).format('YYYY-MM-DD'),
+      endDate: dayjs(data?.endDate).format('YYYY-MM-DD'),
     }
     try {
       if (discountId) {
-        await updateDiscount(discountId, discount)
+        await updateDiscount({ ...discount, id: discountId })
       } else {
         await createDiscount(discount)
       }
-      await discountStore.fetchAllDiscounts()
+      await discountStore.fetchValidDiscounts()
       onClose()
       toast.success('Update discount successfully')
     } catch (error) {
@@ -129,7 +133,7 @@ const DiscountForm = (props: IDiscountFormProps) => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <ModalBody border="1px solid #E2E8F0" padding={6}>
               <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
-                <FormInput name="startDate" label="Start Date">
+                <FormInput name="startDate" label="Ngày bắt đầu">
                   <DatePicker
                     {...register('startDate')}
                     selected={startDate}
@@ -138,7 +142,7 @@ const DiscountForm = (props: IDiscountFormProps) => {
                     customInput={createElement(forwardRef(DateInput))}
                   />
                 </FormInput>
-                <FormInput name="endDate" label="End Date">
+                <FormInput name="endDate" label="Ngày hết hạn">
                   <DatePicker
                     {...register('endDate')}
                     selected={endDate}
@@ -148,21 +152,17 @@ const DiscountForm = (props: IDiscountFormProps) => {
                   />
                 </FormInput>
                 <FormInput name="code" label="Code" placeholder="Enter Code" />
-                <FormInput name="name" label="Name" placeholder="Enter Name" />
-                <FormInput name="value" label="Value" placeholder="Enter Value" />
+                <FormInput name="name" label="Tên" placeholder="Enter Name" />
+                <FormInput name="value" label="Giảm giá" placeholder="Enter Value" />
                 <Dropdown
                   name="typeValue"
                   label="Type"
                   options={discountTypeOptions}
                   setValue={setValue}
                 />
-                <FormInput name="minOrder" label="Min Order" placeholder="Enter Min Order" />
-                <Dropdown
-                  name="appliesToValue"
-                  label="Applies To"
-                  options={discountAppliesToOptions}
-                  setValue={setValue}
-                />
+                <FormInput name="applyMax" label="Áp dụng tối đa" placeholder="Enter Value" />
+                <FormInput name="applyMaxPerClient" label="Áp dụng tối đa cho mỗi người" placeholder="Enter Value" />
+                <FormInput name="minPurchaseValue" label="Đơn hàng tối thiểu" placeholder="Enter Min Order" />
                 {isSpecific && (
                   <Dropdown
                     name="tourValue"

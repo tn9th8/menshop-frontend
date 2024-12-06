@@ -7,7 +7,12 @@ import get from 'lodash/get'
 const UPLOAD_URL = '/api/v1/upload'
 
 export async function uploadFiles(data: FormData): Promise<string> {
-  const response = await api.post('api/v1/admin/files/upload', data)
+  const response = await api.post('api/v1/admin/files/upload', data, {
+    headers: {
+      ...auth(),
+      'folder_type': 'product-thumb-asset'
+    }
+  })
   return response?.data?.data?.file
 }
 

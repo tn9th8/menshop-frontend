@@ -72,6 +72,9 @@ const Header = (props: IHeader) => {
             width="full"
           >
             <HStack spacing={10}>
+              <Link href="/" color="teal.500" fontSize="3xl" fontWeight={600}>
+                MENSHOP
+              </Link>
               <SearchBarInput minHeight="40px" placeholder="Tìm kiếm sản phẩm" />
               <Dropdown
                 minWidth="200px"

@@ -1,5 +1,6 @@
 export interface IDiscount {
   _id?: string
+  id?: string
   name?: string
   code?: string
   value?: number
